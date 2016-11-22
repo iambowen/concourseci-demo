@@ -1,0 +1,30 @@
+resources:
+- name: event-service
+  type: git
+  source:
+    uri: https://github.com/iambowen/microservices-training-first-service.git
+    branch: master
+
+jobs:
+- name: "event service"
+  plan:
+  - get: event-service
+  - task: unit tests
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: limaofeng/gradle-alpine}
+      inputs:
+        - name: event-service
+          path: .
+      run:
+        path: ash
+        args:
+          - -c
+          - gradle test
+          # - -c
+          # - find .
+          # - cd event-service && ls -al
+        # path: event-service/
+        # args: ["gradle test'"]
